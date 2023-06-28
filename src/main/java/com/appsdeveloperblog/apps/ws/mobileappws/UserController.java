@@ -1,6 +1,7 @@
 package com.appsdeveloperblog.apps.ws.mobileappws;
 
 import org.apache.catalina.User;
+import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -14,7 +15,7 @@ public class UserController {
         return "getUser was called page = " + page + " and limit = " + limit + " and sort = " + sort;
     }
 
-    @GetMapping(path = "/{userId}")
+    @GetMapping(path = "/{userId}", produces = { MediaType.APPLICATION_XML_VALUE, MediaType.APPLICATION_JSON_VALUE })
     public UserRest getUser(@PathVariable String userId) {
         UserRest userRest = new UserRest();
         userRest.setEmail("test@test.com");
