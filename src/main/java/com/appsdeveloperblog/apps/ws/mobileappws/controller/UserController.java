@@ -1,19 +1,28 @@
 package com.appsdeveloperblog.apps.ws.mobileappws.controller;
 
+import com.appsdeveloperblog.apps.ws.mobileappws.service.UserService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.HashMap;
 import java.util.Map;
-import java.util.UUID;
 
 @RestController
 @RequestMapping("users")
 public class UserController {
 
     Map<String, UserRest> users;
+
+    private UserService userService;
+
+    public UserController() {
+    }
+
+    public UserController(UserService userService) {
+        this.userService = userService;
+    }
 
     @GetMapping
     public String getUsers(@RequestParam(value="page", defaultValue = "1") int page,
@@ -37,18 +46,7 @@ public class UserController {
 
     @PostMapping
     public ResponseEntity<UserRest> createUser(@RequestBody UserDetailsRequestModel userDetailsRequestModel) {
-        UserRest userRest = new UserRest();
-        userRest.setEmail(userDetailsRequestModel.getEmail());
-        userRest.setFirstName(userDetailsRequestModel.getFirstName());
-        userRest.setLastName(userDetailsRequestModel.getLastName());
-
-        String userId = UUID.randomUUID().toString();
-        userRest.setUserId(userId);
-
-        if (users == null) {
-            users = new HashMap<>();
-        }
-        users.put(userId, userRest);
+        UserRest userRest = userService.createUser(userDetailsRequestModel);
 
         return new ResponseEntity<UserRest>(userRest, HttpStatus.OK);
     }
