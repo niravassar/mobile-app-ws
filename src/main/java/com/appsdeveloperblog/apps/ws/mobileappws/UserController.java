@@ -1,12 +1,19 @@
 package com.appsdeveloperblog.apps.ws.mobileappws;
 
-import org.apache.catalina.User;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.HashMap;
+import java.util.Map;
+import java.util.UUID;
 
 @RestController
 @RequestMapping("users")
 public class UserController {
+
+    Map<String, UserRest> users;
 
     @GetMapping
     public String getUsers(@RequestParam(value="page", defaultValue = "1") int page,
@@ -16,17 +23,30 @@ public class UserController {
     }
 
     @GetMapping(path = "/{userId}", produces = { MediaType.APPLICATION_XML_VALUE, MediaType.APPLICATION_JSON_VALUE })
-    public UserRest getUser(@PathVariable String userId) {
-        UserRest userRest = new UserRest();
-        userRest.setEmail("test@test.com");
-        userRest.setFirstName("Nirav");
-        userRest.setLastName("Assar");
-        return userRest;
+    public ResponseEntity<UserRest> getUser(@PathVariable String userId) {
+        if(users.containsKey(userId)) {
+            return new ResponseEntity<UserRest>(users.get(userId), HttpStatus.OK);
+        } else {
+            return new ResponseEntity<UserRest>(HttpStatus.NO_CONTENT);
+        }
     }
 
     @PostMapping
-    public String createUser() {
-        return "createUser was called";
+    public ResponseEntity<UserRest> createUser(@RequestBody UserDetailsRequestModel userDetailsRequestModel) {
+        UserRest userRest = new UserRest();
+        userRest.setEmail(userDetailsRequestModel.getEmail());
+        userRest.setFirstName(userDetailsRequestModel.getFirstName());
+        userRest.setLastName(userDetailsRequestModel.getLastName());
+
+        String userId = UUID.randomUUID().toString();
+        userRest.setUserId(userId);
+
+        if (users == null) {
+            users = new HashMap<>();
+        }
+        users.put(userId, userRest);
+
+        return new ResponseEntity<UserRest>(userRest, HttpStatus.OK);
     }
 
     @PutMapping
