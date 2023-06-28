@@ -49,9 +49,19 @@ public class UserController {
         return new ResponseEntity<UserRest>(userRest, HttpStatus.OK);
     }
 
-    @PutMapping
-    public String updateUser() {
-        return "updateUser was called";
+    @PutMapping(path = "/{userId}", consumes = { MediaType.APPLICATION_XML_VALUE, MediaType.APPLICATION_JSON_VALUE },
+                                    produces = { MediaType.APPLICATION_XML_VALUE, MediaType.APPLICATION_JSON_VALUE })
+    public ResponseEntity<UserRest> updateUser(@PathVariable String userId, @RequestBody UserDetailsRequestModel userDetailsRequestModel) {
+        if(users.containsKey(userId)) {
+            UserRest storedUserDetails = users.get(userId);
+            storedUserDetails.setFirstName(userDetailsRequestModel.getFirstName());
+            storedUserDetails.setLastName(userDetailsRequestModel.getLastName());
+            users.put(userId, storedUserDetails);
+
+            return new ResponseEntity<UserRest>(storedUserDetails, HttpStatus.ACCEPTED);
+        } else {
+            return new ResponseEntity<UserRest>(HttpStatus.NO_CONTENT);
+        }
     }
 
     @DeleteMapping
