@@ -1,4 +1,4 @@
-package com.appsdeveloperblog.apps.ws.mobileappws;
+package com.appsdeveloperblog.apps.ws.mobileappws.controller;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;

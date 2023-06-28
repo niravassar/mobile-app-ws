@@ -1,4 +1,4 @@
-package com.appsdeveloperblog.apps.ws.mobileappws;
+package com.appsdeveloperblog.apps.ws.mobileappws.controller;
 
 public class UserDetailsRequestModel {
 

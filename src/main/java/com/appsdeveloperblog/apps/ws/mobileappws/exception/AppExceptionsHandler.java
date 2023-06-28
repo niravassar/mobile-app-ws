@@ -1,4 +1,4 @@
-package com.appsdeveloperblog.apps.ws.mobileappws;
+package com.appsdeveloperblog.apps.ws.mobileappws.exception;
 
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
